@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// TODO: buscar materias no banco
 interface Material {
     id: string;
     title: string;
 }
 
+// TODO: buscar materias no banco
 const materials: Material[]  = [
     { id: '1', title: 'Material A' },
     { id: '2', title: 'Material B' },
     { id: '3', title: 'Material C' },
 ];
 
-const RegisterDeliveryScreen: React.FC = () => {
+const RegisterDeliveryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     
     const [datePickerOpen, setDatePickerOpen] = useState(false)
@@ -24,15 +25,37 @@ const RegisterDeliveryScreen: React.FC = () => {
     const [timePickerOpen, setTimePickerOpen] = useState(false)
     const [time, setTime] = useState<Date>(new Date());
 
+    const saveDeliveryRecord = async (delivery: any) => {
+        try {
+            const existingDeliveries = await AsyncStorage.getItem('deliveries');
+            const deliveries = existingDeliveries ? JSON.parse(existingDeliveries) : [];
+            deliveries.push(delivery);
+            await AsyncStorage.setItem('deliveries', JSON.stringify(deliveries));
+            alert('Registro de entrega salvo com sucesso!');
+        } catch (error) {
+            console.error('Erro ao salvar o registro:', error);
+            alert('Erro ao salvar o registro.');
+        }
+    };
+
     const handleSubmit = async () => {
         console.log('Submit register delivery')
         
-    if (!selectedMaterial || !date || !time) {
-        alert('Por favor, preencha todos os campos!');
-        return;
-    }
+        if (!selectedMaterial || !date || !time) {
+            alert('Por favor, preencha todos os campos!');
+            return;
+        }
 
-        // TODO: salvar entrega no banco
+        const deliveryRecord = {
+            materialId: selectedMaterial.id,
+            materialTitle: selectedMaterial.title,
+            deliveryDate: date.toLocaleDateString(),
+            deliveryTime: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+        };
+
+        await saveDeliveryRecord(deliveryRecord);
+
+        navigation.navigate('OPME Track');
     };
 
     return (

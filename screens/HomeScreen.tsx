@@ -8,6 +8,10 @@ const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         title="Registrar Entrega de Materiais"
         onPress={() => navigation.navigate('Registrar Entrega')}
       />
+      <Button
+        title="Ver Entregas Salvas"
+        onPress={() => navigation.navigate('Entregas Salvas')}
+      />
     </View>
   );
 };
