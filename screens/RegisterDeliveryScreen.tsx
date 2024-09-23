@@ -60,7 +60,7 @@ const RegisterDeliveryScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
     return (
         <View style={styles.container}>
-            <Text>Selecionar Material</Text>
+            <Text style={styles.header}>Registrar Entrega</Text>
             <Picker
                 selectedValue={selectedMaterial?.id}
                 onValueChange={(itemValue, itemIndex) => {
@@ -73,7 +73,7 @@ const RegisterDeliveryScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                     <Picker.Item key={material.id} label={material.title} value={material.id} />
                 ))}
             </Picker>
-            <Text>Material selecionado: {selectedMaterial?.title || 'Nenhum'}</Text>
+            <Text style={styles.text}>Material selecionado: {selectedMaterial?.title || 'Nenhum'}</Text>
 
             <Button title="Selecionar data" onPress={() => setDatePickerOpen(true)} />
             {datePickerOpen && (
@@ -87,7 +87,7 @@ const RegisterDeliveryScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                       }}
                 />
             )}
-            <Text>Data selecionada: {date.toLocaleDateString()}</Text>
+            <Text style={styles.text}>Data selecionada: {date.toLocaleDateString()}</Text>
 
             <Button title="Selecionar hora" onPress={() => setTimePickerOpen(true)} />
             {timePickerOpen && (
@@ -101,7 +101,7 @@ const RegisterDeliveryScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                       }}
                 />
             )}
-            <Text>Hora selecionada: {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
+            <Text style={styles.text}>Hora selecionada: {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
 
             <Button title="Registrar" disabled={!selectedMaterial || !date || !time} onPress={handleSubmit} />
         </View>
@@ -116,6 +116,15 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         padding: 10,
     },
+    header: {
+        fontSize: 24,
+        marginBottom: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    text: {
+        paddingBottom: 20,
+    }
 }); 
 
 export default RegisterDeliveryScreen;
